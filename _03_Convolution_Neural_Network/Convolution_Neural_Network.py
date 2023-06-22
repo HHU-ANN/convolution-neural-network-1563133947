@@ -9,7 +9,7 @@ os.system("sudo pip3 install torchvision")
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torchvision
+import torchvision.transforms as transforms
 
 from torch.utils.data import DataLoader
     
@@ -82,17 +82,25 @@ class NeuralNetwork(nn.Module):
 
         return x
 
+transform = transforms.Compose([
+    transforms.RandomHorizontalFlip(),  # 随机水平翻转
+    transforms.RandomCrop(32, padding=4),  # 随机裁剪
+    transforms.ToTensor(),  # 转换为Tensor
+    transforms.Normalize(mean=[0.485, 0.456, 0.406],  # 标准化
+                         std=[0.229, 0.224, 0.225])
+])
+
 def read_data():
     # 这里可自行修改数据预处理，batch大小也可自行调整
     # 保持本地训练的数据读取和这里一致
-    dataset_train = torchvision.datasets.CIFAR10(root='../data/exp03', train=True, download=True, transform=torchvision.transforms.ToTensor())
-    dataset_val = torchvision.datasets.CIFAR10(root='../data/exp03', train=False, download=False, transform=torchvision.transforms.ToTensor())
+    dataset_train = torchvision.datasets.CIFAR10(root='../data/exp03', train=True, download=True, transform=transform)
+    dataset_val = torchvision.datasets.CIFAR10(root='../data/exp03', train=False, download=False, transform=transform)
     data_loader_train = DataLoader(dataset=dataset_train, batch_size=128, shuffle=True)
     data_loader_val = DataLoader(dataset=dataset_val, batch_size=100, shuffle=False)
     return dataset_train, dataset_val, data_loader_train, data_loader_val
 
 def main():
-    model = NeuralNetwork(num_classes=10) # 若有参数则传入参数
+    model = NeuralNetwork() # 若有参数则传入参数
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     model.load_state_dict(torch.load(parent_dir + '/pth/model.pth'),map_location=torch.device('cpu'))
