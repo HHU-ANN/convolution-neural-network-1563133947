@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 
 class NeuralNetwork(nn.Module):
     def __init__(self, num_classes=10):
-        super(AlexNet, self).__init__()
+        super(NeuralNetwork, self).__init__()
 
         # 定义卷积层和池化层
         self.conv_layer1 = nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1)
