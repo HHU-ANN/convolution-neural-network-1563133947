@@ -87,7 +87,7 @@ transform = transforms.Compose([
     transforms.RandomHorizontalFlip(),  # 随机水平翻转
     transforms.RandomCrop(32, padding=4),  # 随机裁剪
     transforms.ToTensor(),  # 转换为Tensor
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],  # 标准
+    transforms.Normalize(mean=[0.485, 0.456, 0.406],  # 标准化
                          std=[0.229, 0.224, 0.225])
 ])
 
